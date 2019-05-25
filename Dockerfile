@@ -1,13 +1,18 @@
-FROM openjdk:11.0.3-jdk
+FROM jupyter/minimal-notebook:abdb27a6dfbb
 
-RUN apt-get update
-RUN apt-get install -y python3-pip
+RUN apt-get -y update && \
+ apt-get -y install \
+ apt-utils
 
-# add requirements.txt, written this way to gracefully ignore a missing file
-COPY . .
-RUN ([ -f requirements.txt ] \
-    && pip3 install --no-cache-dir -r requirements.txt) \
-        || pip3 install --no-cache-dir jupyter jupyterlab
+# Install Java
+RUN apt-get -y install \
+ zip \
+ openjdk-11-jre \
+ openjdk-11-jdk
+
+RUN apt-get purge && \
+ apt-get clean && \
+ rm -rf /var/lib/apt/lists/*
 
 USER root
 

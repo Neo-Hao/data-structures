@@ -1,5 +1,7 @@
 FROM jupyter/minimal-notebook:abdb27a6dfbb
 
+USER root
+
 RUN apt-get -y update && \
  apt-get -y install \
  apt-utils
@@ -13,8 +15,6 @@ RUN apt-get -y install \
 RUN apt-get purge && \
  apt-get clean && \
  rm -rf /var/lib/apt/lists/*
-
-USER root
 
 # Download the kernel release
 RUN curl -L https://github.com/SpencerPark/IJava/releases/download/v1.3.0/ijava-1.3.0.zip > ijava-kernel.zip

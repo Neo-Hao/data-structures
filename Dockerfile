@@ -1,14 +1,15 @@
-FROM jupyter/minimal-notebook:abdb27a6dfbb
-
-USER root
+FROM openjdk:11.0.3-jdk
 
 RUN apt-get update
+RUN apt-get install -y python3-pip
 
-# Install Java
-RUN apt-get -y install \
- curl \
- openjdk-11-jre \
- openjdk-11-jdk
+# add requirements.txt, written this way to gracefully ignore a missing file
+COPY . .
+RUN ([ -f requirements.txt ] \
+    && pip3 install --no-cache-dir -r requirements.txt) \
+        || pip3 install --no-cache-dir jupyter jupyterlab
+
+USER root
 
 # Download the kernel release
 RUN curl -L https://github.com/SpencerPark/IJava/releases/download/v1.3.0/ijava-1.3.0.zip > ijava-kernel.zip
@@ -20,8 +21,8 @@ RUN unzip ijava-kernel.zip -d ijava-kernel \
 
 # Set up the user environment
 
-ENV NB_USER neo
-ENV NB_UID 1002
+ENV NB_USER jovyan
+ENV NB_UID 1000
 ENV HOME /home/$NB_USER
 
 RUN adduser --disabled-password \

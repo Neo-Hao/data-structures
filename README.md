@@ -14,3 +14,7 @@ The content covered by this textbook include:
 * Heap
   * Build a Heap
   * Heap Sort
+* Searching algorithms
+  * Binary Search
+  * Hashtable
+  * Binary Search Tree
